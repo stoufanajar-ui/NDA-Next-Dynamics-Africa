@@ -38,10 +38,8 @@
                 <li><a href="#realisations">Réalisations</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-
-   <a href="#" id="devis-btn" class="btn-nav">Demander un devis</a>
-                Demander un devis
-            </a>
+<a href="#" id="devis-btn" class="btn-nav">Demander un devis</a>
+<div id="google_translate_element" style="display: inline-block; vertical-align: middle; margin-left: 15px;"></div>
         </nav>
     </header>
 
@@ -401,3 +399,15 @@
         </form>
     </div>
 </div>
+<!-- Script pour charger Google Traduction automatiquement -->
+    <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'fr', 
+        includedLanguages: 'en,fr', 
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: true
+      }, 'google_translate_element');
+    }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
