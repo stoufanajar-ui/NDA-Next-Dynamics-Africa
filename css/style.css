@@ -860,3 +860,64 @@ footer {
 .btn-submit-modal:hover {
     background-color: #cda22b;
 }
+/* --- Sélecteur de Langue Personnalisé --- */
+.custom-lang-selector {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px;
+    vertical-align: middle;
+}
+
+.lang-btn {
+    background: transparent;
+    color: #fff; /* Couleur du texte dans la navbar */
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+}
+
+.lang-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 90px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    padding: 10px 0;
+    list-style: none;
+    z-index: 1000;
+}
+
+.lang-dropdown li a {
+    color: #333333 !important;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.lang-dropdown li a:hover {
+    background-color: #f5f5f5;
+}
+
+/* Affichage au survol */
+.custom-lang-selector:hover .lang-dropdown {
+    display: block;
+}
+
+/* Cacher définitivement la bannière supérieure de Google Translate */
+.skiptranslate, .goog-te-banner-frame {
+    display: none !important;
+}
+body {
+    top: 0px !important;
+}
