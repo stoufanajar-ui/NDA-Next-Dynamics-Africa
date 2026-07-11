@@ -37,26 +37,58 @@ window.addEventListener("click", function(event) {
         modal.style.display = "none";
     }
 });
+// --- Envoi du formulaire de Devis via Formspree ---
+const devisForm = document.getElementById('devis-form');
+if (devisForm) {
+    devisForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const submitBtn = this.querySelector('.btn-submit-modal');
+        if (submitBtn) {
+            submitBtn.innerText = 'Envoi en cours...';
+            submitBtn.disabled = true;
+        }
 
-// --- Envoi du formulaire de Devis via EmailJS ---
-document.getElementById('devis-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const submitBtn = this.querySelector('.btn-submit-modal');
-    submitBtn.innerText = 'Envoi en cours...';
-    submitBtn.disabled = true;
+        const formData = new FormData(this);
 
-    // Utilise vos identifiants EmailJS configurés précédemment
-    emailjs.sendForm('VOTRE_SERVICE_ID', 'VOTRE_TEMPLATE_ID', this)
-        .then(function() {
-            alert('Votre demande de devis a bien été transmise ! Notre équipe vous contactera très vite.');
-            modal.style.display = "none"; // Ferme la pop-up automatiquement
-            document.getElementById('devis-form').reset();
-            submitBtn.innerText = 'Envoyer ma demande de devis';
-            submitBtn.disabled = false;
-        }, function(error) {
-            alert("Erreur lors de l'envoi, veuillez réessayer.");
-            submitBtn.innerText = 'Envoyer ma demande de devis';
-            submitBtn.disabled = false;
+        fetch('https://formspree.io/f/xpqvaajr', {
+            method: 'POST',
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Votre demande de devis a bien été transmise !');
+                modal.style.display = "none"; // Ferme la pop-up automatiquement
+                devisForm.reset();
+            } else {
+                alert("Erreur lors de l'envoi, veuillez réessayer.");
+            }
+        })
+        .catch(error => {
+            alert("Erreur réseau, veuillez réessayer.");
+        })
+        .finally(() => {
+            if (submitBtn) {
+                submitBtn.innerText = 'Envoyer ma demande de devis';
+                submitBtn.disabled = false;
+            }
         });
-});
+    });
+}
+// Fonction pour changer la langue via le sélecteur personnalisé
+function changeLanguage(langCode) {
+    const googleSelect = document.querySelector('.goog-te-combo');
+    if (googleSelect) {
+        googleSelect.value = langCode;
+        // Déclenche l'événement pour faire comprendre à Google qu'on a changé la langue
+        googleSelect.dispatchEvent(new Event('change'));
+        
+        // Optionnel : change le texte du bouton principal du sélecteur
+        const langBtn = document.querySelector('.lang-btn');
+        if (langBtn) {
+            langBtn.innerHTML = langCode.toUpperCase() + ' <i class="fa-solid fa-chevron-down"></i>';
+        }
+    } else {
+        console.error("Le widget Google Translate n'est pas encore chargé.");
+    }
+}
