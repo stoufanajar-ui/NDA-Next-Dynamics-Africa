@@ -75,20 +75,35 @@ if (devisForm) {
         });
     });
 }
-// Fonction pour changer la langue via le sélecteur personnalisé
+// Fonction améliorée pour changer la langue via le sélecteur personnalisé
 function changeLanguage(langCode) {
-    const googleSelect = document.querySelector('.goog-te-combo');
+    // 1. Essaye de trouver le menu déroulant de Google Translate
+    let googleSelect = document.querySelector('.goog-te-combo');
+    
+    // 2. Si Google ne l'a pas encore créé, on va chercher l'iframe cachée de Google
+    if (!googleSelect) {
+        const iframe = document.querySelector('.goog-te-menu-frame');
+        if (iframe && iframe.contentWindow) {
+            const iframeDoc = iframe.contentWindow.document;
+            googleSelect = iframeDoc.querySelector('.goog-te-combo');
+        }
+    }
+
+    // 3. Si on trouve le sélecteur, on applique le changement
     if (googleSelect) {
         googleSelect.value = langCode;
-        // Déclenche l'événement pour faire comprendre à Google qu'on a changé la langue
         googleSelect.dispatchEvent(new Event('change'));
         
-        // Optionnel : change le texte du bouton principal du sélecteur
+        // Change le texte du bouton principal du sélecteur
         const langBtn = document.querySelector('.lang-btn');
         if (langBtn) {
             langBtn.innerHTML = langCode.toUpperCase() + ' <i class="fa-solid fa-chevron-down"></i>';
         }
     } else {
-        console.error("Le widget Google Translate n'est pas encore chargé.");
+        // Si Google Translate utilise l'ancien système d'URL (ex: #googtrans(fr|en))
+        // On force la page à se recharger avec le bon paramètre de langue
+        const currentUrl = window.location.html || window.location.pathname;
+        window.location.hash = `#googtrans(fr|${langCode})`;
+        window.location.reload();
     }
 }
